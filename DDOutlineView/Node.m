@@ -40,9 +40,9 @@
 - (void)awakeFromInsert {
     [super awakeFromInsert] ;
     self.identifier = [[NSProcessInfo processInfo] globallyUniqueString] ;
-    self.name = [[NSString alloc initWithFormat:
+    self.name = [[NSString alloc] initWithFormat:
                   @"Added at %@",
-                  [NSDate date]]] ;
+                  [NSDate date]] ;
 }
 
 #pragma mark - KVO/KVC
@@ -68,6 +68,7 @@
 	}
 	[super willChange:pChangeKind valuesAtIndexes:pIndexes forKey:pKey];
 }
+
 - (void)didChange:(NSKeyValueChange)pChangeKind valuesAtIndexes:(NSIndexSet *)pIndexes forKey:(NSString *)pKey {
 	[super didChange:pChangeKind valuesAtIndexes:pIndexes forKey:pKey];
 	if([pKey isEqualToString:@"children"]) {
@@ -79,11 +80,12 @@
 #pragma mark - Children
 
 - (BOOL)canBeParentOf:(Node *)pNode {
-	return NO;
+    return (pNode != nil && pNode != self && ![pNode isAncestorOf:self]);
 }
 - (BOOL)canBeChildOf:(Node *)pNode {
-	return YES;
+    return (pNode == nil || (pNode != self && ![pNode isDescendentOf:self]));
 }
+
 - (BOOL)isAncestorOf:(Node *)pNode {
 	if(pNode == nil) {
 		return NO;
@@ -145,21 +147,3 @@
 
 @end
 
-@implementation Group
-
-#pragma mark - Properties
-
-- (BOOL)isLeaf {
-	return NO;
-}
-
-#pragma mark - Children
-
-- (BOOL)canBeParentOf:(Node *)pNode {
-	return (pNode != nil && pNode != self && ![pNode isAncestorOf:self]);
-}
-- (BOOL)canBeChildOf:(Node *)pNode {
-	return (pNode == nil || (pNode != self && [pNode isKindOfClass:[Group class]] && ![pNode isDescendentOf:self]));
-}
-
-@end

@@ -26,6 +26,3 @@
 - (NSIndexPath *)indexPathToDescendent:(Node *)pNode;
 
 @end
-
-@interface Group : Node
-@end
