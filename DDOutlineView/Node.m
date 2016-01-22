@@ -37,13 +37,12 @@
 
 #pragma mark - Initialization
 
-- (id)initWithEntity:(NSEntityDescription *)pEntity insertIntoManagedObjectContext:(NSManagedObjectContext *)pContext {
-	if((self = [super initWithEntity:pEntity insertIntoManagedObjectContext:pContext])) {
-		[self willChangeValueForKey:@"identifier"];
-		[self setPrimitiveValue:[[NSProcessInfo processInfo] globallyUniqueString] forKey:@"identifier"];
-		[self didChangeValueForKey:@"identifier"];
-	}
-	return self;
+- (void)awakeFromInsert {
+    [super awakeFromInsert] ;
+    self.identifier = [[NSProcessInfo processInfo] globallyUniqueString] ;
+    self.name = [[NSString alloc initWithFormat:
+                  @"Added at %@",
+                  [NSDate date]]] ;
 }
 
 #pragma mark - KVO/KVC

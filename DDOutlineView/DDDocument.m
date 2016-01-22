@@ -14,7 +14,8 @@
 - (void)windowControllerDidLoadNib:(NSWindowController *)pWindowController {
 	[super windowControllerDidLoadNib:pWindowController];
 	
-	[self.undoManager beginUndoGrouping];
+#if 0
+    [self.undoManager beginUndoGrouping];
 	
 	for(NSInteger i = 0; i < 3; ++i) {
 		Group *group = [NSEntityDescription insertNewObjectForEntityForName:@"Group" inManagedObjectContext:self.managedObjectContext];
@@ -40,6 +41,7 @@
 		[self.managedObjectContext processPendingChanges];
 		[self.undoManager endUndoGrouping];
 	});
+#endif
 }
 
 @end
